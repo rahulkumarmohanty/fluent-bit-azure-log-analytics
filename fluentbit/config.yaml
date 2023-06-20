@@ -22,7 +22,7 @@ data:
   output.conf: |
     [OUTPUT]
         Name            azure
-        Match           kube.var.log.containers.logapp*.*
+        Match           *
         Customer_ID     ${WorkspaceId}
         Shared_Key      ${SharedKey}
         Log_Type        ${LogName}
@@ -32,7 +32,7 @@ data:
         Name              tail
         Tag               kube.*
         Path              /var/log/containers/*.log
-        Parser            cri
+        Parser            docker
         DB                /var/log/flb_kube.db
         Mem_Buf_Limit     5MB
         Skip_Long_Lines   Off
@@ -47,26 +47,8 @@ data:
         Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
         Kube_Tag_Prefix     kube.var.log.containers.
         Merge_Log           On
-        Merge_Log_Trim      On
-        Keep_Log            Off
         K8S-Logging.Parser  On
         K8S-Logging.Exclude Off
-        Annotations         Off
-        Labels              On
-
-    [FILTER]
-        Name          nest
-        Match         kube.*
-        Operation     lift
-        Nested_under  kubernetes
-        Add_prefix    kubernetes_
-
-    [FILTER]
-        Name          nest
-        Match         kube.*
-        Operation     lift
-        Nested_under  kubernetes_labels
-        Add_prefix    kubernetes_labels_
 
   parsers.conf: |
     [PARSER]
