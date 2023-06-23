@@ -37,6 +37,17 @@ data:
         Mem_Buf_Limit     5MB
         Skip_Long_Lines   Off
         Refresh_Interval  10
+     
+    [INPUT]
+        Name              tail
+        Tag               kube.*
+        Path              /var/log/pods/*.log
+        Parser            docker
+        DB                /var/log/flb_kube.db
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   Off
+        Refresh_Interval  10 
+    
 
   filter-kubernetes.conf: |
     [FILTER]
